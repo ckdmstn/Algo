@@ -4,7 +4,7 @@ public class MagicSquareMain {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("4의배수 정수를 입력하세요.");
+		System.out.println("숫자를 입력하세요.");
 		int n = sc.nextInt();
 		
 		MagicSquare magic = null;
