@@ -1,6 +1,8 @@
 package com.ssafy.edu.first;
 import java.util.Scanner;
+
 public class SixMagicSquareMain {
+	
 	public static void main(String[] args) {
 		Scanner scann = new Scanner(System.in);
 		
@@ -12,6 +14,7 @@ public class SixMagicSquareMain {
 		sms.make();
 		sms.print();
 	}
+	
 }
 /*
 1) A 0, 3

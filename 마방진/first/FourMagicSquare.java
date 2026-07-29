@@ -11,6 +11,7 @@ public class FourMagicSquare{
 		magic=new int [n][n];  
 		this.n = n;
 	}
+	
 	public FourMagicSquare() {
 		this(4);
 	}
@@ -37,7 +38,7 @@ public class FourMagicSquare{
 	}
 	
 	private void makeA() {
-		for (int i = 0; i <n * n; i++) {
+		for (int i = 0; i < n * n; i++) {
 			magic[i / n][i % n]= i+1;
 		}
 	}
@@ -47,7 +48,7 @@ public class FourMagicSquare{
 		System.out.println(n + " is magic : " + isMagic());
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				System.out.print(magic[i][j]+"\t");
+				System.out.print(magic[i][j] + "\t");
 			}
 			System.out.println();
 		}
@@ -92,7 +93,7 @@ public class FourMagicSquare{
 	//마방진이 잘 되었는가를 판단
 	private  boolean isMagic( ){
 		boolean isM = true;
-		int[ ] m = new int[2 * n + 2];
+		int[] m = new int[2 * n + 2];
 		
 		for (int i = 0; i < n; i++) {
 			m[i] = sumRow(i);

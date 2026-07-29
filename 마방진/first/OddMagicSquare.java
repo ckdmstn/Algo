@@ -100,7 +100,7 @@ public class OddMagicSquare {
 	// 마방진이 잘 되었는가를 판단
 	private  boolean isMagic( ){
 		boolean isM = true;
-		int[] m=new int[2 * n + 2];  // 행 수 n + 열 수 n + 대각선 1 + 역대각선 1
+		int[] m = new int[2 * n + 2];  // 행 수 n + 열 수 n + 대각선 1 + 역대각선 1
 		
 		for (int i = 0; i < n; i++) {
 			m[i] = sumRow(i);      // 0, 1, 2 행의 합
