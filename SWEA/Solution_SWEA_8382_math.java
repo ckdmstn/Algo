@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Solution_SWEA_8382_math {
-
+// D4
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
