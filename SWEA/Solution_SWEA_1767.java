@@ -1,14 +1,13 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Solution_SWEA_1767 {
 
-	static int N, maxCount, answer, totalLineCount;
+	static int N, maxCore, minLength;
 	static int[][] map;
-	static boolean[][] connected;
+	static int[] dr = {-1, 0, 1, 0};
+	static int[] dc = {0, -1, 0, 1};
 	static ArrayList<int[]> coreList;
-	static int[] dr = {0, 0, -1, 1};
-	static int[] dc = {1, -1, 0, 0};
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,17 +17,17 @@ public class Solution_SWEA_1767 {
 		for (int test_case = 1; test_case <= T; test_case++) {
 			N = Integer.parseInt(br.readLine());
 			map = new int[N][N];
-			connected = new boolean[N][N];
 			coreList = new ArrayList<>();
-			maxCount = totalLineCount = 0;
-			answer = Integer.MAX_VALUE;
+			maxCore = 0; 
+			
 			for (int i = 0; i < N; i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int j = 0; j < N; j++) {
 					map[i][j] = Integer.parseInt(st.nextToken());
+					
 					if (map[i][j] == 1) {
-						if (i == 0 || j == 0 || i == N - 1 || j == N - 1) {
-							connected[i][j] = true;
+						if (i == 0 || i == N - 1 || j == 0 || j == N - 1) {
+							maxCore++;
 						} else {
 							coreList.add(new int[] {i, j});
 						}
@@ -36,83 +35,66 @@ public class Solution_SWEA_1767 {
 				}
 			}
 			
-			connect(0, 0);
+			minLength = Integer.MAX_VALUE;
 			
-			sb.append("#").append(test_case).append(" ").append(answer).append("\n");
+			func(0, maxCore, 0);
+			
+			sb.append("#").append(test_case).append(" ").append(minLength).append("\n");
 		}
 		
 		System.out.println(sb);
 	}
 	
-	static void connect(int idx, int curCount) {
-		if (idx == coreList.size()) {
-			if (curCount > maxCount) {
-				maxCount = curCount;
-				answer = totalLineCount;
-			} else if (curCount == maxCount) {
-				answer = Math.min(answer, totalLineCount);
+	static void func(int idx, int coreCount, int length) {
+		if (coreList.size() == idx) {
+			if (maxCore < coreCount) {
+				maxCore = coreCount;
+				minLength = length;
+			} else if (maxCore == coreCount) {
+				minLength = Math.min(minLength, length);
 			}
-			return;
-		}
-		
-		if (curCount + (coreList.size() - idx) < maxCount) {
 			return;
 		}
 		
 		int[] cur = coreList.get(idx);
-		int r = cur[0], c = cur[1];
 		
-		for (int i = 0; i < 5; i++) {
-			// dir : 0 - 오, 1 - 왼, 2 - 위, 3 - 아래
-			if (i != 4) {
-				int len = isConnectByDir(r, c, i);
-				if (len != -1) {
-					changeConnect(r, c, i, true);
-					connected[r][c] = true;
-					totalLineCount += len;
-					
-					connect(idx + 1, curCount + 1);
-					
-					totalLineCount -= len;
-					changeConnect(r, c, i, false);
-					connected[r][c] = false;
-				}
+		for (int d = 0; d < 5; d++) {
+			if (d == 4) {
+				func(idx + 1, coreCount, length);
 			} else {
-				connect(idx + 1, curCount);
+				int curLength = connectLength(cur[0], cur[1], d);
+				
+				if (curLength > 0) {
+					connectWires(cur[0], cur[1], d, 2); // 연결
+					func(idx + 1, coreCount + 1, length + curLength);
+					connectWires(cur[0], cur[1], d, 0); // 연결 해제
+				}
 			}
 		}
 	}
 	
-	static int isConnectByDir(int r, int c, int dir) {
-		// dir : 0 - 오, 1 - 왼, 2 - 위, 3 - 아래
-		int nr = r + dr[dir];
-		int nc = c + dc[dir];
+	static int connectLength(int r, int c, int d) {
 		int length = 0;
 		
 		while (true) {
-			if (nr >= N || nr < 0 || nc >= N || nc < 0) {
-				return length;
-			}
+			r += dr[d];
+			c += dc[d];
 			
-			if (connected[nr][nc] || map[nr][nc] == 1) {
-				return -1;
-			}
+			if (r < 0 || c < 0 || r >= N || c >= N) return length;
+			if (map[r][c] == 1 || map[r][c] == 2) return 0;
 			
 			length++;
-			nr += dr[dir];
-			nc += dc[dir];
 		}
 	}
 	
-	static void changeConnect(int r, int c, int dir, boolean con) {
-		int nr = r + dr[dir];
-		int nc = c + dc[dir];
-		
-		while (nr < N && nr >= 0 && nc < N && nc >= 0) {
-			connected[nr][nc] = con;
+	static void connectWires(int r, int c, int d, int num) {
+		while (true) {
+			r += dr[d];
+			c += dc[d];
 			
-			nr += dr[dir];
-			nc += dc[dir];
+			if (r < 0 || c < 0 || r >= N || c >= N) return;
+			
+			map[r][c] = num;
 		}
 	}
 
